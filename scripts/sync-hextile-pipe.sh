@@ -40,18 +40,17 @@ if [[ ! -e "$ROOT/$SUB" ]]; then
   exit 2
 fi
 
-# Refuse if parent has other staged paths (shared index safety)
-while IFS= read -r line; do
-  [[ -z "$line" ]] && continue
-  if [[ "$line" != "$SUB" ]]; then
-    echo "sync-hextile-pipe: refuse — other paths already staged:" >&2
-    git diff --cached --name-only >&2
-    echo "commit or unstage them first" >&2
-    exit 1
-  fi
-done < <(git diff --cached --name-only)
+# Refuse ANY staged paths (including $SUB) — never overwrite an index entry
+# this invocation did not create (Codex High: staged gitlink erase on no-op).
+staged_any="$(git diff --cached --name-only)"
+if [[ -n "$staged_any" ]]; then
+  echo "sync-hextile-pipe: refuse — index already has staged paths:" >&2
+  echo "$staged_any" >&2
+  echo "commit or unstage them first" >&2
+  exit 1
+fi
 
-# Parent gitlink SHA at HEAD (empty if uncommitted submodule)
+# Parent gitlink SHA at HEAD
 old_sha="$(git ls-tree HEAD "$SUB" 2>/dev/null | awk '{print $3}' || true)"
 
 # Submodule dirty check
@@ -76,37 +75,52 @@ git submodule update --init --remote -- "$SUB"
 new_sha="$(git -C "$ROOT/$SUB" rev-parse HEAD)"
 short_sha="$(git -C "$ROOT/$SUB" rev-parse --short HEAD)"
 
+# Strict version read — never commit vunknown (Codex High)
 read_version() {
   local f="$1"
-  if [[ -f "$f" ]]; then
-    python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['version'])" "$f" 2>/dev/null || echo "unknown"
-  else
-    echo "missing"
-  fi
+  python3 - "$f" <<'PY'
+import json, sys
+path = sys.argv[1]
+try:
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+except FileNotFoundError:
+    print(f"missing:{path}", file=sys.stderr)
+    sys.exit(3)
+except json.JSONDecodeError as e:
+    print(f"malformed JSON {path}: {e}", file=sys.stderr)
+    sys.exit(3)
+ver = data.get("version")
+if not isinstance(ver, str) or not ver.strip():
+    print(f"missing or non-string version in {path}", file=sys.stderr)
+    sys.exit(3)
+print(ver.strip())
+PY
 }
 
-claude_ver="$(read_version "$ROOT/$SUB/.claude-plugin/plugin.json")"
-codex_ver="$(read_version "$ROOT/$SUB/.codex-plugin/plugin.json")"
+claude_ver="$(read_version "$ROOT/$SUB/.claude-plugin/plugin.json")" || {
+  echo "sync-hextile-pipe: refuse — cannot read Claude plugin version" >&2
+  exit 1
+}
+codex_ver="$(read_version "$ROOT/$SUB/.codex-plugin/plugin.json")" || {
+  echo "sync-hextile-pipe: refuse — cannot read Codex plugin version" >&2
+  exit 1
+}
 if [[ "$claude_ver" != "$codex_ver" ]]; then
   echo "sync-hextile-pipe: WARN version lockstep broken claude=$claude_ver codex=$codex_ver" >&2
 fi
 ver="$claude_ver"
 
-# Stage only the submodule gitlink
-git add -- "$SUB"
-
-head_link="${old_sha:-}"
-# If HEAD already points at this SHA and index has no effective change, no-op
-if git diff --cached --quiet -- "$SUB"; then
-  # Nothing staged relative to HEAD for this path
+# No-op when HEAD gitlink already matches worktree tip
+if [[ -n "$old_sha" && "$old_sha" == "$new_sha" ]]; then
   echo "sync-hextile-pipe: already up to date at $short_sha (v$ver)"
   exit 0
 fi
 
-# Double-check: staged gitlink mode 160000 object must equal new_sha
-staged_sha="$(git ls-files -s -- "$SUB" | awk '{print $2}')"
-if [[ -n "$head_link" && "$head_link" == "$new_sha" && "$staged_sha" == "$new_sha" ]]; then
-  git restore --staged -- "$SUB" 2>/dev/null || git reset -q HEAD -- "$SUB" 2>/dev/null || true
+# Stage only the submodule gitlink
+git add -- "$SUB"
+
+if git diff --cached --quiet -- "$SUB"; then
   echo "sync-hextile-pipe: already up to date at $short_sha (v$ver)"
   exit 0
 fi
