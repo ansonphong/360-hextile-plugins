@@ -66,16 +66,34 @@ After install:
 
 If a host rejects a leading-digit marketplace id, rename tech id to **`hextile-360`** in all three indexes (same tokens) — not bare `hextile`.
 
-## Refresh a plugin
+## Refresh a plugin (keep hextile-pipe in sync)
 
-1. Ship a new version in the plugin repo (bump both plugin.json files lockstep).
-2. Here: `git submodule update --remote plugins/hextile-pipe` (or pin a SHA).
-3. Commit the submodule pin.
-4. On the host: marketplace update / reinstall `hextile-pipe@360-hextile`.
+Ship in **hextile-pipe**, then advance this catalog’s pin:
 
 ```bash
+# one command — fetches remote tip, commits pin only if SHA changed
+./scripts/sync-hextile-pipe.sh
+# optional: ./scripts/sync-hextile-pipe.sh --push   # when origin exists
+
+# first-time / clone hygiene
 git submodule update --init --recursive
 ```
+
+Already current → exit 0 and prints `already up to date` with short SHA + version.
+
+**Hosts do not auto-update.** After the pin moves, refresh install caches:
+
+| Host | After pin moves |
+|------|-----------------|
+| Claude | marketplace update `360-hextile`, then reinstall `hextile-pipe@360-hextile` |
+| Grok | `grok plugin marketplace update` and/or reinstall the plugin |
+| Codex | `codex plugin marketplace upgrade 360-hextile` (then re-add plugin if needed) |
+
+Manual equivalent (if you skip the script):
+
+1. Bump both plugin.json versions lockstep in hextile-pipe and push.
+2. `git submodule update --remote plugins/hextile-pipe`
+3. Commit the gitlink only: `git add plugins/hextile-pipe && git commit --only -m "…" -- plugins/hextile-pipe`
 
 ## License
 
