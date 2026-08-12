@@ -1,0 +1,3 @@
+[submodule "plugins/hextile-pipe"]
+	path = plugins/hextile-pipe
+	url = git@github.com:ansonphong/hextile-pipe.git

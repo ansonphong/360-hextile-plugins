@@ -1,0 +1,19 @@
+{
+  "name": "360-hextile",
+  "description": "360 Hextile — agent tools for 360 artists and studio workflows",
+  "owner": {
+    "name": "Phong",
+    "url": "https://github.com/ansonphong"
+  },
+  "plugins": [
+    {
+      "name": "hextile-pipe",
+      "description": "Studio matte CLIs and Adobe export helpers",
+      "category": "productivity",
+      "source": {
+        "type": "local",
+        "path": "./plugins/hextile-pipe"
+      }
+    }
+  ]
+}

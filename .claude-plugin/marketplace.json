@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "360-hextile",
+  "description": "360 Hextile — agent tools for 360 artists and studio workflows",
+  "owner": {
+    "name": "Phong",
+    "url": "https://github.com/ansonphong"
+  },
+  "plugins": [
+    {
+      "name": "hextile-pipe",
+      "source": "./plugins/hextile-pipe",
+      "category": "productivity",
+      "homepage": "https://github.com/ansonphong/hextile-pipe",
+      "tags": ["studio", "matte", "assets", "360-hextile"]
+    }
+  ]
+}
