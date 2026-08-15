@@ -14,6 +14,15 @@
         "type": "local",
         "path": "./plugins/hextile-pipe"
       }
+    },
+    {
+      "name": "hextile",
+      "description": "List, save, run, and monitor 360 Hextile Workflows over localhost HTTP",
+      "category": "productivity",
+      "source": {
+        "type": "local",
+        "path": "./plugins/hextile"
+      }
     }
   ]
 }

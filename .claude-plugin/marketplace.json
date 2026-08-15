@@ -13,6 +13,13 @@
       "category": "productivity",
       "homepage": "https://github.com/ansonphong/hextile-pipe",
       "tags": ["studio", "matte", "assets", "360-hextile"]
+    },
+    {
+      "name": "hextile",
+      "source": "./plugins/hextile",
+      "category": "productivity",
+      "homepage": "https://github.com/ansonphong/360-hextile-agent",
+      "tags": ["360", "hextile", "mcp", "workflows"]
     }
   ]
 }

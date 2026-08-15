@@ -1,3 +1,6 @@
 [submodule "plugins/hextile-pipe"]
 	path = plugins/hextile-pipe
 	url = git@github.com:ansonphong/hextile-pipe.git
+[submodule "plugins/hextile"]
+	path = plugins/hextile
+	url = git@github.com:ansonphong/360-hextile-agent.git
