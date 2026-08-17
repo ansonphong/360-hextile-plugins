@@ -7,23 +7,18 @@ Catalog of agent plugins for **360 artists and studio workflows**.
 | **Display** | 360 Hextile |
 | **Tech marketplace name** | `360-hextile` |
 | **GitHub** | [`ansonphong/360-hextile-plugins`](https://github.com/ansonphong/360-hextile-plugins) |
+| **Local catalog** | `D:\Projects\360-HEXTILE\360-hextile-plugins` |
 
 This repo is **marketplace-only**. Product code lives in each plugin’s own repo (git submodules under `plugins/`).
 
-## Audience split (do not blur)
-
-| Marketplace | Audience | Example install |
-|-------------|----------|-----------------|
-| **meta-dev** | Developers | `meta-dev@meta-dev` |
-| **chapterwise-plugins** | Writers | chapterwise plugins |
-| **360-hextile** | 360 artists / studio | `hextile-pipe@360-hextile` |
-
 ## Plugins
 
-| Plugin | Job | Install id |
-|--------|-----|------------|
-| **hextile-pipe** | Studio matte / Adobe helpers | `hextile-pipe@360-hextile` |
-| **hextile** | APP Workflow automation — MCP tools + skill (20 tools over localhost HTTP) | `hextile@360-hextile` |
+| Plugin | Job | Product repo | Install id |
+|--------|-----|--------------|------------|
+| **hextile-pipe** | Studio matte / Adobe helpers | `D:\Projects\360-HEXTILE\hextile-pipe` (GitHub: `ansonphong/hextile-pipe`) | `hextile-pipe@360-hextile` |
+| **hextile-agent** | App workflow automation — MCP tools + skill over localhost HTTP | `D:\Projects\360-HEXTILE\hextile-agent` (GitHub: `ansonphong/360-hextile-agent`) | `hextile-agent@360-hextile` |
+
+`hextile-agent` is the plugin. Do not call it `hextile`.
 
 ## Install
 
@@ -33,20 +28,20 @@ Add the catalog once, then install either plugin (or both).
 # Claude Code
 /plugin marketplace add ansonphong/360-hextile-plugins
 /plugin install hextile-pipe@360-hextile
-/plugin install hextile@360-hextile
+/plugin install hextile-agent@360-hextile
 
 # Grok
 grok plugin marketplace add ansonphong/360-hextile-plugins
 grok plugin install hextile-pipe --trust
-grok plugin install hextile --trust
+grok plugin install hextile-agent --trust
 
 # Codex
-codex plugin marketplace add <path-to-360-hextile-plugins>
+codex plugin marketplace add D:\Projects\360-HEXTILE\360-hextile-plugins
 codex plugin add hextile-pipe@360-hextile
-codex plugin add hextile@360-hextile
+codex plugin add hextile-agent@360-hextile
 
 # Studio local path
-grok plugin marketplace add /path/to/360-hextile-plugins
+grok plugin marketplace add D:\Projects\360-HEXTILE\360-hextile-plugins
 ```
 
 After install:
@@ -59,18 +54,21 @@ After install:
 ## Layout
 
 ```text
-360-hextile-plugins/
-  .claude-plugin/marketplace.json    # name: 360-hextile
-  .agents/plugins/marketplace.json   # name: 360-hextile
-  .grok-plugin/marketplace.json      # name: 360-hextile
-  plugins/
-    hextile-pipe/                    # submodule → ansonphong/hextile-pipe
-    hextile/                         # submodule → ansonphong/360-hextile-agent
+D:\Projects\360-HEXTILE\
+  360-hextile-plugins/               # this catalog
+    .claude-plugin/marketplace.json  # name: 360-hextile
+    .agents/plugins/marketplace.json # name: 360-hextile
+    .grok-plugin/marketplace.json    # name: 360-hextile
+    plugins/
+      hextile-pipe/                  # submodule → ansonphong/hextile-pipe
+      hextile-agent/                 # submodule → ansonphong/360-hextile-agent
+  hextile-pipe/                      # product repo
+  hextile-agent/                     # product repo
 ```
 
 **Hard rule:** all three marketplace JSON `"name"` fields stay **`360-hextile`** (Codex freezes upgrades on name drift).
 
-If a host rejects a leading-digit marketplace id, rename tech id to **`hextile-360`** in all three indexes (same tokens) — not bare `hextile`.
+If a host rejects a leading-digit marketplace id, rename tech id to **`hextile-360`** in all three indexes (same tokens). Do not use a bare `hextile` marketplace or plugin id.
 
 ## Refresh a plugin (keep submodule pins in sync)
 
@@ -78,8 +76,8 @@ Ship in a plugin repo, then advance this catalog’s pin:
 
 ```bash
 # one command per plugin — fetches remote tip, commits the pin only if the SHA changed
-./scripts/sync-hextile-pipe.sh    # ansonphong/hextile-pipe        → plugins/hextile-pipe
-./scripts/sync-hextile.sh         # ansonphong/360-hextile-agent   → plugins/hextile
+./scripts/sync-hextile-pipe.sh     # ansonphong/hextile-pipe          → plugins/hextile-pipe
+./scripts/sync-hextile-agent.sh    # ansonphong/360-hextile-agent     → plugins/hextile-agent
 # optional: append --push to either   # when origin exists
 
 # first-time / clone hygiene
@@ -92,15 +90,15 @@ Already current → exit 0 and prints `already up to date` with short SHA + vers
 
 | Host | After pin moves |
 |------|-----------------|
-| Claude | marketplace update `360-hextile`, then reinstall the plugin (`hextile-pipe@360-hextile` / `hextile@360-hextile`) |
+| Claude | marketplace update `360-hextile`, then reinstall (`hextile-pipe@360-hextile` / `hextile-agent@360-hextile`) |
 | Grok | `grok plugin marketplace update` and/or reinstall the plugin |
 | Codex | `codex plugin marketplace upgrade 360-hextile` (then re-add plugin if needed) |
 
 Manual equivalent (if you skip the script):
 
-1. Bump both plugin.json versions lockstep in hextile-pipe and push.
-2. `git submodule update --remote plugins/hextile-pipe`
-3. Commit the gitlink only: `git add plugins/hextile-pipe && git commit --only -m "…" -- plugins/hextile-pipe`
+1. Bump plugin.json versions lockstep in the product repo and push.
+2. `git submodule update --remote plugins/hextile-pipe` or `plugins/hextile-agent`
+3. Commit the gitlink only: `git add plugins/<name> && git commit --only -m "…" -- plugins/<name>`
 
 ## License
 
