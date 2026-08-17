@@ -22,7 +22,7 @@ Sixty seconds. Pick your host.
 ```text
 /plugin marketplace add ansonphong/360-hextile-plugins
 /plugin install hextile-pipe@360-hextile
-/plugin install hextile@360-hextile
+/plugin install hextile-agent@360-hextile
 ```
 
 Then:
@@ -39,7 +39,7 @@ Then:
 ```text
 codex plugin marketplace add D:\Projects\360-HEXTILE\360-hextile-plugins
 codex plugin add hextile-pipe@360-hextile
-codex plugin add hextile@360-hextile
+codex plugin add hextile-agent@360-hextile
 ```
 
 </details>
@@ -50,7 +50,7 @@ codex plugin add hextile@360-hextile
 ```text
 grok plugin marketplace add ansonphong/360-hextile-plugins
 grok plugin install hextile-pipe --trust
-grok plugin install hextile --trust
+grok plugin install hextile-agent --trust
 ```
 
 Studio path if you already have the catalog cloned:
@@ -68,9 +68,9 @@ grok plugin marketplace add D:\Projects\360-HEXTILE\360-hextile-plugins
 | Plugin | What it is | You type |
 |:-------|:-----------|:---------|
 | **hextile-pipe** | Studio matte and Adobe helpers. Whiten, cutout, knockout, despeckle, trim. | `hextile-pipe@360-hextile` |
-| **hextile-agent** | Drive the 360 Hextile app from the agent. Workflows, renders, 360-LoRA, over localhost HTTP. | `hextile@360-hextile` |
+| **hextile-agent** | Drive the 360 Hextile app from the agent. Workflows, renders, 360-LoRA, over localhost HTTP. | `hextile-agent@360-hextile` |
 
-**hextile-agent** is the app plugin. The catalog id is still `hextile` so the install command stays `hextile@360-hextile`.
+**hextile-agent** is the app plugin. The catalog id is still `hextile` so the install command stays `hextile-agent@360-hextile`.
 
 | Plugin | Lives here |
 |:-------|:-----------|
@@ -117,7 +117,7 @@ Ship in the product repo, then move this catalog’s pin.
 
 ```bash
 ./scripts/sync-hextile-pipe.sh     # ansonphong/hextile-pipe        → plugins/hextile-pipe
-./scripts/sync-hextile.sh          # ansonphong/360-hextile-agent   → plugins/hextile
+./scripts/sync-hextile-agent.sh          # ansonphong/360-hextile-agent   → plugins/hextile-agent
 # append --push when origin should move too
 
 git submodule update --init --recursive
@@ -136,7 +136,7 @@ Hosts do **not** auto-update. After the pin moves:
 Manual path:
 
 1. Bump `plugin.json` in the product repo and push.
-2. `git submodule update --remote plugins/hextile-pipe` or `plugins/hextile`
+2. `git submodule update --remote plugins/hextile-pipe` or `plugins/hextile-agent`
 3. Commit the gitlink only.
 
 ---

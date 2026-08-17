@@ -15,8 +15,8 @@
       "tags": ["studio", "matte", "assets", "360-hextile"]
     },
     {
-      "name": "hextile",
-      "source": "./plugins/hextile",
+      "name": "hextile-agent",
+      "source": "./plugins/hextile-agent",
       "category": "productivity",
       "homepage": "https://github.com/ansonphong/360-hextile-agent",
       "tags": ["360", "hextile", "mcp", "workflows"]
