@@ -42,6 +42,8 @@ codex plugin add hextile-pipe@360-hextile
 codex plugin add hextile-agent@360-hextile
 ```
 
+`codex plugin add` installs the skill. Stdio MCP still needs `python3 codex/install.py` from the agent repo (`[mcp_servers.hextile]`).
+
 </details>
 
 <details>
@@ -70,7 +72,7 @@ grok plugin marketplace add D:\Projects\360-HEXTILE\360-hextile-plugins
 | **hextile-pipe** | Studio matte and Adobe helpers. Whiten, cutout, knockout, despeckle, trim. | `hextile-pipe@360-hextile` |
 | **hextile-agent** | Drive the 360 Hextile app from the agent. Workflows, renders, 360-LoRA, over localhost HTTP. | `hextile-agent@360-hextile` |
 
-**hextile-agent** is the app plugin. The catalog id is still `hextile` so the install command stays `hextile-agent@360-hextile`.
+**hextile-agent** is the app plugin. Catalog install id: `hextile-agent@360-hextile`.
 
 | Plugin | Lives here |
 |:-------|:-----------|
@@ -100,7 +102,7 @@ D:\Projects\360-HEXTILE\
     .grok-plugin/marketplace.json      name: 360-hextile
     plugins/
       hextile-pipe/                    → ansonphong/hextile-pipe
-      hextile/                         → ansonphong/360-hextile-agent   (hextile-agent)
+      hextile-agent/                   → ansonphong/360-hextile-agent
   hextile-pipe/                        product repo
   hextile-agent/                       product repo
 ```
