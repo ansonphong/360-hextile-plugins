@@ -46,8 +46,10 @@ codex plugin add hextile-agent@360-hextile
 
 </details>
 
-<details>
+<details open>
 <summary><strong>Grok</strong></summary>
+
+Add this GitHub catalog, then install the plugins. Marketplace add does not install them.
 
 ```text
 grok plugin marketplace add ansonphong/360-hextile-plugins
@@ -55,11 +57,17 @@ grok plugin install hextile-pipe --trust
 grok plugin install hextile-agent --trust
 ```
 
-Studio path if you already have the catalog cloned:
+Enable `hextile-agent` (and `hextile-pipe`) in `/plugins` or `~/.grok/config.toml` `[plugins].enabled`. Reload (`r`) or start a new session.
+
+Install names are `hextile-pipe` and `hextile-agent` — not `hextile`, not `hextile-agent@360-hextile`.
+
+Studio path if you already have this repo cloned:
 
 ```text
 grok plugin marketplace add D:\Projects\360-HEXTILE\360-hextile-plugins
 ```
+
+A local path marketplace does not move on `grok plugin marketplace update`. After a catalog pin, run `grok plugin update hextile-agent`.
 
 </details>
 
