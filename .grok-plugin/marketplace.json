@@ -11,8 +11,9 @@
       "description": "Studio matte CLIs and Adobe export helpers",
       "category": "productivity",
       "source": {
-        "type": "local",
-        "path": "./plugins/hextile-pipe"
+        "source": "url",
+        "url": "https://github.com/ansonphong/hextile-pipe.git",
+        "sha": "83e97aab62f28ad909ee66711ab45c05dfdfe9bf"
       }
     },
     {
@@ -20,8 +21,9 @@
       "description": "List, save, run, and monitor 360 Hextile Workflows over localhost HTTP",
       "category": "productivity",
       "source": {
-        "type": "local",
-        "path": "./plugins/hextile-agent"
+        "source": "url",
+        "url": "https://github.com/ansonphong/360-hextile-agent.git",
+        "sha": "a5a1d61db6bd69d1d0e637098c1b26c13e232238"
       }
     }
   ]

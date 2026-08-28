@@ -105,22 +105,40 @@ ver="$(read_version "$ROOT/$SUB/.claude-plugin/plugin.json")" || {
   exit 1
 }
 
-# No-op when HEAD gitlink already matches worktree tip
-if [[ -n "$old_sha" && "$old_sha" == "$new_sha" ]]; then
+GROK_MARKET="$ROOT/.grok-plugin/marketplace.json"
+python3 - "$GROK_MARKET" hextile-agent \
+  "https://github.com/ansonphong/360-hextile-agent.git" "$new_sha" <<'PY'
+import json, sys
+path, name, url, sha = sys.argv[1:5]
+with open(path, encoding="utf-8") as fh:
+    data = json.load(fh)
+for plugin in data.get("plugins", []):
+    if plugin.get("name") == name:
+        plugin["source"] = {"source": "url", "url": url, "sha": sha}
+        break
+else:
+    sys.exit(f"plugin {name} missing from {path}")
+with open(path, "w", encoding="utf-8") as fh:
+    json.dump(data, fh, indent=2)
+    fh.write("\n")
+PY
+
+# No-op when HEAD gitlink already matches worktree tip and Grok pin matches
+if [[ -n "$old_sha" && "$old_sha" == "$new_sha" ]] \
+  && git diff --quiet -- "$GROK_MARKET"; then
   echo "sync-hextile-agent: already up to date at $short_sha (v$ver)"
   exit 0
 fi
 
-# Stage only the submodule gitlink
-git add -- "$SUB"
+git add -- "$SUB" "$GROK_MARKET"
 
-if git diff --cached --quiet -- "$SUB"; then
+if git diff --cached --quiet -- "$SUB" "$GROK_MARKET"; then
   echo "sync-hextile-agent: already up to date at $short_sha (v$ver)"
   exit 0
 fi
 
 msg="chore: pin hextile-agent ${short_sha} (v${ver})"
-git commit --only -m "$msg" -- "$SUB"
+git commit --only -m "$msg" -- "$SUB" "$GROK_MARKET"
 
 old_disp="${old_sha:-none}"
 if [[ "$old_disp" != "none" && ${#old_disp} -ge 7 ]]; then
