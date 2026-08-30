@@ -94,7 +94,7 @@ Local catalog checkout: `codex plugin marketplace add D:\Projects\360-HEXTILE\36
 | Plugin | What it is | Claude / Codex | Grok |
 |:-------|:-----------|:---------------|:-----|
 | **hextile-pipe** | Studio matte and Adobe helpers. Whiten, cutout, knockout, despeckle, trim. | `hextile-pipe@360-hextile` | `hextile-pipe` |
-| **hextile-agent** | Drive the 360 Hextile app. Workflows, renders, 360-LoRA, over localhost HTTP. 22 MCP tools. | `hextile-agent@360-hextile` | `hextile-agent` |
+| **hextile-agent** | Drive the 360 Hextile app. Workflows, renders, 360-LoRA, GPU upres via `/hextile-upres`, over localhost HTTP. 28 MCP tools. | `hextile-agent@360-hextile` | `hextile-agent` |
 
 | Plugin | Product repo |
 |:-------|:-------------|
