@@ -1,6 +1,6 @@
 {
   "name": "360-hextile",
-  "description": "360 Hextile — agent tools for 360 artists and studio workflows",
+  "description": "360 Hextile \u2014 agent tools for 360 artists and studio workflows",
   "owner": {
     "name": "Phong",
     "url": "https://github.com/ansonphong"
@@ -23,7 +23,7 @@
       "source": {
         "source": "url",
         "url": "https://github.com/ansonphong/360-hextile-agent.git",
-        "sha": "a5a1d61db6bd69d1d0e637098c1b26c13e232238"
+        "sha": "0a481348e5efc7cd5f57a83a11b359afbc6f2d7e"
       }
     }
   ]
