@@ -17,13 +17,13 @@
       }
     },
     {
-      "name": "hextile-agent",
+      "name": "360-hextile",
       "description": "List, save, run, and monitor 360 Hextile Workflows over localhost HTTP",
       "category": "productivity",
       "source": {
         "source": "url",
         "url": "https://github.com/ansonphong/360-hextile-agent.git",
-        "sha": "0a481348e5efc7cd5f57a83a11b359afbc6f2d7e"
+        "sha": "f42b0c9ebe9709629d13a97f146cc12eff859dcd"
       }
     }
   ]

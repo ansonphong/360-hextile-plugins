@@ -12,14 +12,24 @@
       "source": "./plugins/hextile-pipe",
       "category": "productivity",
       "homepage": "https://github.com/ansonphong/hextile-pipe",
-      "tags": ["studio", "matte", "assets", "360-hextile"]
+      "tags": [
+        "studio",
+        "matte",
+        "assets",
+        "360-hextile"
+      ]
     },
     {
-      "name": "hextile-agent",
-      "source": "./plugins/hextile-agent",
+      "name": "360-hextile",
+      "source": "./plugins/360-hextile",
       "category": "productivity",
       "homepage": "https://github.com/ansonphong/360-hextile-agent",
-      "tags": ["360", "hextile", "mcp", "workflows"]
+      "tags": [
+        "360",
+        "hextile",
+        "mcp",
+        "workflows"
+      ]
     }
   ]
 }

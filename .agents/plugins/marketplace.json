@@ -17,10 +17,10 @@
       "category": "Productivity"
     },
     {
-      "name": "hextile-agent",
+      "name": "360-hextile",
       "source": {
         "source": "local",
-        "path": "./plugins/hextile-agent"
+        "path": "./plugins/360-hextile"
       },
       "policy": {
         "installation": "AVAILABLE",

@@ -16,7 +16,7 @@ This repo is the **catalog** (an index). Product code lives in each plugin’s o
 
 Add **one** marketplace source. Then install the plugins. Marketplace add does not install them.
 
-Use the **GitHub** catalog. Do not also add the local disk path — two sources with the same name make `hextile-agent` ambiguous.
+Use the **GitHub** catalog. Do not also add the local disk path — two sources with the same name make `360-hextile` ambiguous.
 
 <details open>
 <summary><strong>Claude Code</strong></summary>
@@ -24,7 +24,7 @@ Use the **GitHub** catalog. Do not also add the local disk path — two sources 
 ```text
 /plugin marketplace add ansonphong/360-hextile-plugins
 /plugin install hextile-pipe@360-hextile
-/plugin install hextile-agent@360-hextile
+/plugin install 360-hextile@360-hextile
 ```
 
 Then:
@@ -33,7 +33,7 @@ Then:
 /hextile-pipe doctor
 ```
 
-Claude install id is **`hextile-agent@360-hextile`**. Never `hextile@360-hextile`.
+Claude install id is **`360-hextile@360-hextile`**. Never `hextile@360-hextile`.
 
 </details>
 
@@ -43,14 +43,14 @@ Claude install id is **`hextile-agent@360-hextile`**. Never `hextile@360-hextile
 ```text
 grok plugin marketplace add ansonphong/360-hextile-plugins
 grok plugin install hextile-pipe --trust
-grok plugin install hextile-agent --trust
+grok plugin install 360-hextile --trust
 grok plugin enable hextile-pipe
-grok plugin enable hextile-agent
+grok plugin enable 360-hextile
 ```
 
 Reload (`r` in `/plugins`) or start a new session.
 
-Grok install names are **`hextile-pipe`** and **`hextile-agent`**. Not `hextile`. Not `hextile-agent@360-hextile`. Not `hextile-agent@ansonphong/360-hextile-plugins` (`@` on `grok plugin install` is a git ref, not a marketplace pin).
+Grok install names are **`hextile-pipe`** and **`360-hextile`**. Not `hextile`. Not the old name `hextile-agent`. Not `360-hextile@ansonphong/360-hextile-plugins` (`@` on `grok plugin install` is a git ref, not a marketplace pin).
 
 Enable in `/plugins` or `~/.grok/config.toml` `[plugins].enabled`. Trusted MCP needs `--trust`.
 
@@ -60,7 +60,7 @@ Studio disk clone (only if you did **not** add the GitHub source):
 grok plugin marketplace add D:\Projects\360-HEXTILE\360-hextile-plugins
 ```
 
-A local-path marketplace does not move on `grok plugin marketplace update`. After a catalog pin, run `grok plugin update hextile-agent`. Prefer GitHub so `marketplace update` pulls origin.
+A local-path marketplace does not move on `grok plugin marketplace update`. After a catalog pin, run `grok plugin update 360-hextile`. Prefer GitHub so `marketplace update` pulls origin.
 
 </details>
 
@@ -70,7 +70,7 @@ A local-path marketplace does not move on `grok plugin marketplace update`. Afte
 ```text
 codex plugin marketplace add ansonphong/360-hextile-plugins
 codex plugin add hextile-pipe@360-hextile
-codex plugin add hextile-agent@360-hextile
+codex plugin add 360-hextile@360-hextile
 ```
 
 `codex plugin add` installs the skill. Stdio MCP still needs the agent installer:
@@ -94,12 +94,12 @@ Local catalog checkout: `codex plugin marketplace add D:\Projects\360-HEXTILE\36
 | Plugin | What it is | Claude / Codex | Grok |
 |:-------|:-----------|:---------------|:-----|
 | **hextile-pipe** | Studio matte and Adobe helpers. Whiten, cutout, knockout, despeckle, trim. | `hextile-pipe@360-hextile` | `hextile-pipe` |
-| **hextile-agent** | Drive the 360 Hextile app. Workflows, renders, 360-LoRA, GPU upres via `/hextile-upres`, over localhost HTTP. 28 MCP tools. | `hextile-agent@360-hextile` | `hextile-agent` |
+| **360-hextile** | Drive the 360 Hextile app. Workflows, renders, 360-LoRA, GPU upres via `/360-hextile:upres`, over localhost HTTP. 28 MCP tools. | `360-hextile@360-hextile` | `360-hextile` |
 
 | Plugin | Product repo |
 |:-------|:-------------|
 | hextile-pipe | [ansonphong/hextile-pipe](https://github.com/ansonphong/hextile-pipe) |
-| hextile-agent | [ansonphong/360-hextile-agent](https://github.com/ansonphong/360-hextile-agent) |
+| 360-hextile | [ansonphong/360-hextile-agent](https://github.com/ansonphong/360-hextile-agent) |
 
 ---
 
@@ -110,7 +110,7 @@ Local catalog checkout: `codex plugin marketplace add D:\Projects\360-HEXTILE\36
 /hextile-knockout path/to/file.png
 ```
 
-`hextile-agent` talks to a local 360 Hextile instance on `127.0.0.1:8000`. Open the app first. If the app is down, tools return a clean error; the MCP process stays up. `get_guide` works without the app.
+`360-hextile` talks to a local 360 Hextile instance on `127.0.0.1:8000`. Open the app first. If the app is down, tools return a clean error; the MCP process stays up. `get_guide` works without the app.
 
 ---
 
@@ -123,7 +123,7 @@ Local catalog checkout: `codex plugin marketplace add D:\Projects\360-HEXTILE\36
   .grok-plugin/marketplace.json      name: 360-hextile  (git URL + SHA)
   plugins/
     hextile-pipe/                    gitlink → ansonphong/hextile-pipe
-    hextile-agent/                   gitlink → ansonphong/360-hextile-agent
+    360-hextile/                   gitlink → ansonphong/360-hextile-agent
 ```
 
 All three marketplace JSON `"name"` fields stay **`360-hextile`**. Codex freezes upgrades if that name drifts.
@@ -140,7 +140,7 @@ Ship in the product repo, then move this catalog’s pin.
 
 ```bash
 ./scripts/sync-hextile-pipe.sh      # gitlink + Grok SHA → hextile-pipe
-./scripts/sync-hextile-agent.sh     # gitlink + Grok SHA → hextile-agent
+./scripts/sync-360-hextile.sh     # gitlink + Grok SHA → 360-hextile
 # append --push when origin should move too
 ```
 
@@ -150,10 +150,20 @@ Hosts do **not** auto-update. After the pin is on GitHub:
 
 | Host | Then |
 |:-----|:-----|
-| Claude | marketplace update `360-hextile`, then `/plugin update hextile-agent` |
-| Grok | `grok plugin marketplace update` then `grok plugin update hextile-agent` (and pipe) |
+| Claude | marketplace update `360-hextile`, then `/plugin update 360-hextile` |
+| Grok | `grok plugin marketplace update` then `grok plugin update 360-hextile` (and pipe) |
 | Codex | `codex plugin marketplace upgrade 360-hextile` · pull the agent clone if you use `codex/install.py` |
 
 ---
 
 Private studio catalog unless you add a LICENSE.
+
+## Upgrading from `hextile-agent` (renamed in 0.5.0)
+
+The plugin is now `360-hextile`. The old install id `hextile-agent@360-hextile` no longer updates.
+
+- Claude: `/plugin uninstall hextile-agent@360-hextile`, then `/plugin marketplace update 360-hextile`, then `/plugin install 360-hextile@360-hextile`.
+- Grok: `grok plugin uninstall hextile-agent`, then `grok plugin marketplace update`, then `grok plugin install 360-hextile --trust`.
+- Codex: re-run `python3 codex/install.py`. It removes the old `hextile` and `hextile-upres` skills.
+
+Skills: `/360-hextile:360-hextile` (workflows), `/360-hextile:shader`, `/360-hextile:upres`.
