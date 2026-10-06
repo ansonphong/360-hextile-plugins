@@ -157,13 +157,3 @@ Hosts do **not** auto-update. After the pin is on GitHub:
 ---
 
 Private studio catalog unless you add a LICENSE.
-
-## Upgrading from `hextile-agent` (renamed in 0.5.0)
-
-The plugin is now `360-hextile`. The old install id `hextile-agent@360-hextile` no longer updates.
-
-- Claude: `/plugin uninstall hextile-agent@360-hextile`, then `/plugin marketplace update 360-hextile`, then `/plugin install 360-hextile@360-hextile`.
-- Grok: `grok plugin uninstall hextile-agent`, then `grok plugin marketplace update`, then `grok plugin install 360-hextile --trust`.
-- Codex: re-run `python3 codex/install.py`. It removes the old `hextile` and `hextile-upres` skills.
-
-Skills: `/360-hextile:360-hextile` (workflows), `/360-hextile:shader`, `/360-hextile:upres`.
