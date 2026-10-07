@@ -8,7 +8,7 @@ Agent tools for **360 artists**. Add the catalog once. Install a plugin. Start w
 | **GitHub** | [ansonphong/360-hextile-plugins](https://github.com/ansonphong/360-hextile-plugins) |
 | **On disk** | `D:\Projects\360-HEXTILE\360-hextile-plugins` |
 
-This repo is the **catalog** (an index). Product code lives in each plugin’s own git repo. Grok installs those repos by URL + SHA. Claude still uses the `plugins/` gitlinks in this clone.
+This repo is the **catalog** (an index). Product code lives in each plugin’s own git repo. Codex and Grok install those repos by HTTPS URL + SHA. Claude uses the `plugins/` gitlinks in this clone.
 
 ---
 
@@ -73,15 +73,7 @@ codex plugin add hextile-pipe@360-hextile
 codex plugin add 360-hextile@360-hextile
 ```
 
-`codex plugin add` installs the skill. Stdio MCP still needs the agent installer:
-
-```text
-git clone https://github.com/ansonphong/360-hextile-agent.git
-cd 360-hextile-agent
-python3 codex/install.py
-```
-
-That writes `[mcp_servers.hextile]` with `sys.executable`. Restart Codex and check `/mcp` for `hextile`. Codex ≥ 0.34.0. v1 is stdio only.
+Use a current Codex CLI with `codex plugin` support. The `360-hextile` plugin includes its skills and the bundled `hextile` stdio MCP proxy; a separate agent clone or installer is not required. Git and Python 3.9 or newer are prerequisites, and `python3` must be available to the agent. Start a new Codex session after installation and check `/mcp` for `hextile`. Keep 360 Hextile open on the same computer at `127.0.0.1:8000`.
 
 Local catalog checkout: `codex plugin marketplace add D:\Projects\360-HEXTILE\360-hextile-plugins`.
 
@@ -119,7 +111,7 @@ Local catalog checkout: `codex plugin marketplace add D:\Projects\360-HEXTILE\36
 ```text
 360-hextile-plugins/                 this catalog
   .claude-plugin/marketplace.json    name: 360-hextile  (local plugin paths)
-  .agents/plugins/marketplace.json   name: 360-hextile
+  .agents/plugins/marketplace.json   name: 360-hextile  (git URL + SHA)
   .grok-plugin/marketplace.json      name: 360-hextile  (git URL + SHA)
   plugins/
     hextile-pipe/                    gitlink → ansonphong/hextile-pipe
@@ -128,7 +120,7 @@ Local catalog checkout: `codex plugin marketplace add D:\Projects\360-HEXTILE\36
 
 All three marketplace JSON `"name"` fields stay **`360-hextile`**. Codex freezes upgrades if that name drifts.
 
-Grok does **not** init git submodules. Its index points at each product repo (`url` + `sha`), not at `./plugins/…`. Claude uses the gitlinks.
+Codex and Grok do **not** init git submodules. Both indexes point at each product repo (`url` + `sha`), not at `./plugins/…`. Claude uses the gitlinks.
 
 If a host rejects a leading-digit marketplace id, rename the tech id to **`hextile-360`** in all three indexes. Same tokens everywhere. Do not use a bare `hextile` marketplace name.
 
@@ -139,8 +131,8 @@ If a host rejects a leading-digit marketplace id, rename the tech id to **`hexti
 Ship in the product repo, then move this catalog’s pin.
 
 ```bash
-./scripts/sync-hextile-pipe.sh      # gitlink + Grok SHA → hextile-pipe
-./scripts/sync-360-hextile.sh     # gitlink + Grok SHA → 360-hextile
+./scripts/sync-hextile-pipe.sh      # gitlink + Codex/Grok SHA → hextile-pipe
+./scripts/sync-360-hextile.sh       # gitlink + Codex/Grok SHA → 360-hextile
 # append --push when origin should move too
 ```
 
@@ -152,7 +144,7 @@ Hosts do **not** auto-update. After the pin is on GitHub:
 |:-----|:-----|
 | Claude | marketplace update `360-hextile`, then `/plugin update 360-hextile` |
 | Grok | `grok plugin marketplace update` then `grok plugin update 360-hextile` (and pipe) |
-| Codex | `codex plugin marketplace upgrade 360-hextile` · pull the agent clone if you use `codex/install.py` |
+| Codex | `codex plugin marketplace upgrade 360-hextile` |
 
 ---
 

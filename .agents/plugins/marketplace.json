@@ -7,8 +7,9 @@
     {
       "name": "hextile-pipe",
       "source": {
-        "source": "local",
-        "path": "./plugins/hextile-pipe"
+        "source": "url",
+        "url": "https://github.com/ansonphong/hextile-pipe.git",
+        "sha": "83e97aab62f28ad909ee66711ab45c05dfdfe9bf"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -19,8 +20,9 @@
     {
       "name": "360-hextile",
       "source": {
-        "source": "local",
-        "path": "./plugins/360-hextile"
+        "source": "url",
+        "url": "https://github.com/ansonphong/360-hextile-agent.git",
+        "sha": "d4d6b2429530a0c051d14cce860d336129e33f72"
       },
       "policy": {
         "installation": "AVAILABLE",

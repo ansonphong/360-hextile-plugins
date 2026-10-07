@@ -112,7 +112,9 @@ fi
 ver="$claude_ver"
 
 GROK_MARKET="$ROOT/.grok-plugin/marketplace.json"
-python3 - "$GROK_MARKET" hextile-pipe \
+CODEX_MARKET="$ROOT/.agents/plugins/marketplace.json"
+for MARKET in "$GROK_MARKET" "$CODEX_MARKET"; do
+python3 - "$MARKET" hextile-pipe \
   "https://github.com/ansonphong/hextile-pipe.git" "$new_sha" <<'PY'
 import json, sys
 path, name, url, sha = sys.argv[1:5]
@@ -128,23 +130,24 @@ with open(path, "w", encoding="utf-8") as fh:
     json.dump(data, fh, indent=2)
     fh.write("\n")
 PY
+done
 
-# No-op when HEAD gitlink already matches worktree tip and Grok pin matches
+# No-op when HEAD gitlink already matches worktree tip and both marketplace pins match
 if [[ -n "$old_sha" && "$old_sha" == "$new_sha" ]] \
-  && git diff --quiet -- "$GROK_MARKET"; then
+  && git diff --quiet -- "$GROK_MARKET" "$CODEX_MARKET"; then
   echo "sync-hextile-pipe: already up to date at $short_sha (v$ver)"
   exit 0
 fi
 
-git add -- "$SUB" "$GROK_MARKET"
+git add -- "$SUB" "$GROK_MARKET" "$CODEX_MARKET"
 
-if git diff --cached --quiet -- "$SUB" "$GROK_MARKET"; then
+if git diff --cached --quiet -- "$SUB" "$GROK_MARKET" "$CODEX_MARKET"; then
   echo "sync-hextile-pipe: already up to date at $short_sha (v$ver)"
   exit 0
 fi
 
 msg="chore: pin hextile-pipe ${short_sha} (v${ver})"
-git commit --only -m "$msg" -- "$SUB" "$GROK_MARKET"
+git commit --only -m "$msg" -- "$SUB" "$GROK_MARKET" "$CODEX_MARKET"
 
 old_disp="${old_sha:-none}"
 if [[ "$old_disp" != "none" && ${#old_disp} -ge 7 ]]; then
